@@ -51,5 +51,13 @@ class Compiler:
 
             if keyword == "until":
                 keyword = "while not"
+                pycode.pycode += ind + f"{keyword} {cond}:\n"
 
-            pycode.pycode += ind + f"{keyword} {cond}:\n"
+            elif keyword == "while":
+                pycode.pycode += ind + f"{keyword} {cond}:\n"
+
+            elif keyword == "for":
+                varname = self.args[1]
+                start = self.args[2].split("to")[0].strip()
+                end = self.args[2].split("to")[1].strip()
+                pycode.pycode += ind + f"for {varname} in range({start}, {end}):\n"
