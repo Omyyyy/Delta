@@ -1,0 +1,6 @@
+func main, [name age gender]
+    printf name
+    printf age
+    printf gender
+
+call main, ["omar" 15 "male"]

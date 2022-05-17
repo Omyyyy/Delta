@@ -61,3 +61,38 @@ class Compiler:
                 start = self.args[2].split("to")[0].strip()
                 end = self.args[2].split("to")[1].strip()
                 pycode.pycode += ind + f"for {varname} in range({start}, {end}):\n"
+
+        elif self.cmd == "func":
+            funcname = self.args[0]
+            if self.arglen == 1:
+                pycode.pycode += ind + f"def {funcname}():\n"
+
+            else:
+                arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
+                arglist = [arg.strip() for arg in arglist]
+                pyarglist = ", ".join(arglist)
+                pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
+
+        elif self.cmd == "fastfunc":
+            funcname = self.args[0]
+            if self.arglen == 1:
+                pycode.pycode += ind + f"@jit()\n"
+                pycode.pycode += ind + f"def {funcname}():\n"
+
+            else:
+                arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
+                arglist = [arg.strip() for arg in arglist]
+                pyarglist = ", ".join(arglist)
+                pycode.pycode += ind + f"@jit()\n"
+                pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
+
+        elif self.cmd == "call":
+            funcname = self.args[0]
+            if self.arglen == 1:
+                pycode.pycode += ind + f"{funcname}()\n"
+
+            else:
+                arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
+                arglist = [arg.strip() for arg in arglist]
+                pyarglist = ", ".join(arglist)
+                pycode.pycode += ind + f"{funcname}({pyarglist})\n"
