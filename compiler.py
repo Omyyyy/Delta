@@ -21,3 +21,7 @@ class Compiler:
             prompt = self.args[0]
             varname = self.args[1]
             pycode.pycode += f"{varname} = input({prompt})\n"
+
+        elif self.cmd == "var":
+            varthing = self.args[0]
+            pycode.pycode += f"{varthing}\n"
