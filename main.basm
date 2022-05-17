@@ -1,3 +1,2 @@
-input "name? ", name
-
-print name
+var name = 3
+printf name

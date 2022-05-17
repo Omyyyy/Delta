@@ -14,11 +14,14 @@ class Compiler:
             pycode.pycode += f"print('{toprint}')\n"
         
         elif self.cmd == "printf":
-            evaled = str(eval(self.args[0]))
-            toprint = evaled if evaled[0] == '"' and evaled[-1] == '"' else '"' + evaled + '"'
+            toprint = self.args[0]
             pycode.pycode += f"print({toprint})\n"
 
         elif self.cmd == "input":
             prompt = self.args[0]
             varname = self.args[1]
             pycode.pycode += f"{varname} = input({prompt})\n"
+
+        elif self.cmd == "var":
+            varstuff = self.args[0]
+            pycode.pycode += f"{varstuff}\n"
