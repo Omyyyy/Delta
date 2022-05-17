@@ -1,3 +1,2 @@
-input "name? ", name
-
-printf "hello " + name
+loop while, 3 == 3
+    print cool

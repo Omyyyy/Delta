@@ -21,7 +21,7 @@ with open(filename) as f:
         if code[0] == '#' or code.isspace():
             continue
 
-        code = code.strip()
+        code = code.rstrip()
 
         compiler.Compiler(code, filename).basm2py() if not code.isspace() and code != "\n" else None
 
@@ -35,6 +35,7 @@ try:
     exec(pycode.pycode)
     runend = time.perf_counter()
     print(f"\n[INFO]: Run {filename} in {round((runend - runstart)*1000, 2)}ms") if INFO else None
+    print(f"\n[INFO]: Total time: {round(((runend - runstart)*1000) + ((compend - compstart)*1000), 2)}ms") if INFO else None
 
 except Exception as e:
     print(f"\n[ERROR]: {e}")
