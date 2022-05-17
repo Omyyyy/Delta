@@ -14,8 +14,7 @@ class Compiler:
             pycode.pycode += f"print('{toprint}')\n"
         
         elif self.cmd == "printf":
-            evaled = str(eval(self.args[0]))
-            toprint = evaled if evaled[0] == '"' and evaled[-1] == '"' else '"' + evaled + '"'
+            toprint = self.args[0]
             pycode.pycode += f"print({toprint})\n"
 
         elif self.cmd == "input":
