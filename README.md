@@ -1,2 +1,2 @@
-# BASM
+# BPL
 Bad Programming Language
