@@ -1,6 +1,2 @@
-func main, [name age gender]
-    printf name
-    printf age
-    printf gender
-
-call main, ["omar" 15 "male"]
+loop for, i, 1 to 10001
+    printf i

@@ -4,7 +4,12 @@ class Compiler:
     def __init__(self, line: str, filename):
         self.line = line
         self.cmd = line.strip().split(" ", 1)[0].strip()
-        self.args = [arg.strip() for arg in line.strip().split(" ", 1)[1].split(",")]
+        try:
+            self.args = [arg.strip() for arg in line.strip().split(" ", 1)[1].split(",")]
+
+        except IndexError:
+            self.args = []
+
         self.arglen = len(self.args)
         self.filename = filename
 
@@ -86,13 +91,23 @@ class Compiler:
                 pycode.pycode += ind + f"@jit()\n"
                 pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
 
-        elif self.cmd == "call":
-            funcname = self.args[0]
+
+        elif self.cmd == "return":
+            if self.arglen == 0:
+                pycode.pycode += ind + f"return\n"
             if self.arglen == 1:
+                pycode.pycode += ind + f"return {self.args[0]}\n"
+            else:
+                toreturn = ",".join(self.args)
+                pycode.pycode += ind + f"return {toreturn}\n"
+
+        else:
+            funcname = self.cmd
+            if self.arglen == 0:
                 pycode.pycode += ind + f"{funcname}()\n"
 
             else:
-                arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
+                arglist = self.args[0].removeprefix("[").removesuffix("]").split(" ")
                 arglist = [arg.strip() for arg in arglist]
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"{funcname}({pyarglist})\n"
