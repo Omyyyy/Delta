@@ -1,5 +1,4 @@
 func main
-	print h
+	return 2
 
-
-main []
+printf main []

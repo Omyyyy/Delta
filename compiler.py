@@ -1,5 +1,7 @@
 import pycode
 
+funcnames = []
+
 class Compiler:
     def __init__(self, line: str, filename):
         self.line = line
@@ -21,9 +23,12 @@ class Compiler:
             pycode.pycode += ind + f"print('{toprint}')\n"
         
         elif self.cmd == "printf":
-            printtoks = self.args
             toprint = self.args[0]
-            pycode.pycode += ind + f"print({toprint})\n"
+            if self.args[0].split(" ")[0] in funcnames:
+                pycode.pycode += ind + f"print({self.basmcalltopy(self.args[0])})\n"
+
+            else:
+                pycode.pycode += ind + f"print({toprint})\n"
 
         elif self.cmd == "input":
             prompt = self.args[0]
@@ -32,7 +37,12 @@ class Compiler:
 
         elif self.cmd == "var":
             varthing = self.args[0]
-            pycode.pycode += ind + f"{varthing}\n"
+            varname = self.args[0].split("=", 1)[0].strip()
+            vardefin = self.args[0].split("=", 1)[1].strip()
+            if vardefin.split(" ", 1)[0] in funcnames:
+                pycode.pycode += ind + f"{varname} = {self.basmcalltopy(vardefin)}\n"
+            else:
+                pycode.pycode += ind + f"{varthing}\n"
 
         elif self.cmd == "cond":
             keyword = self.args[0]
@@ -72,12 +82,14 @@ class Compiler:
             funcname = self.args[0]
             if self.arglen == 1:
                 pycode.pycode += ind + f"def {funcname}():\n"
+                funcnames.append(funcname)
 
             else:
                 arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
                 arglist = [arg.strip() for arg in arglist]
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
+                funcnames.append(funcname)
 
         elif self.cmd == "fastfunc":
             funcname = self.args[0]
@@ -112,3 +124,20 @@ class Compiler:
                 arglist = [arg.strip() for arg in arglist]
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"{funcname}({pyarglist})\n"
+
+    def basmcalltopy(self, call: str):
+        funcname = call.split(" ", 1)[0].strip()
+        try:
+            arglist = call.split(" ", 1)[1].strip().removeprefix("[").removesuffix("]").split(" ")
+        except IndexError:
+            arglist = []
+
+        arglist = [arg.strip() for arg in arglist]
+        arglen = len(arglist)
+
+        if arglen == 0:
+            return f"{funcname}()"
+
+        else:
+            pyarglist = ", ".join(arglist)
+            return f"{funcname}({pyarglist})"
