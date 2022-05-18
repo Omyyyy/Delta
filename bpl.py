@@ -23,7 +23,7 @@ with open(filename) as f:
 
         code = code.rstrip()
 
-        compiler.Compiler(code, filename).basm2py() if not code.isspace() and code != "\n" else None
+        compiler.Compiler(code, filename).bpl2py() if not code.isspace() and code != "\n" else None
 
 compend = time.perf_counter()
 
