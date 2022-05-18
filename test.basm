@@ -1,2 +1,5 @@
-loop for, i, 1 to 10001
-    printf i
+func main
+	print h
+
+
+main []

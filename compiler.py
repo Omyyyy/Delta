@@ -21,6 +21,7 @@ class Compiler:
             pycode.pycode += ind + f"print('{toprint}')\n"
         
         elif self.cmd == "printf":
+            printtoks = self.args
             toprint = self.args[0]
             pycode.pycode += ind + f"print({toprint})\n"
 
