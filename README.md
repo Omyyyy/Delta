@@ -1,2 +1,2 @@
 # BASM
-Bad Assembly 
+Bad Programming Language
