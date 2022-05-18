@@ -1,6 +1,5 @@
-func main, [name age gender]
-    printf name
-    printf age
-    printf gender
+func main
+	print h
 
-call main, ["omar" 15 "male"]
+
+main []
