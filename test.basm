@@ -1,4 +1,3 @@
-func main
-	return 2
+import std.basm
 
-printf main []
+printf std.upper("it works!")

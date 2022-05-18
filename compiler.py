@@ -1,4 +1,10 @@
 import pycode
+from colorama import Fore, init
+
+init(autoreset=True)
+
+def red(string):
+    return Fore.RED + string + Fore.RESET
 
 funcnames = []
 
@@ -24,7 +30,14 @@ class Compiler:
         
         elif self.cmd == "printf":
             toprint = self.args[0]
-            if self.args[0].split(" ")[0] in funcnames:
+            if "." in toprint:
+                if self.args[0].split(" ")[0].split(".")[1] in funcnames:
+                    pycode.pycode += ind + f"print({self.basmcalltopy(self.args[0])})\n"
+
+                else:
+                    pycode.pycode += ind + f"print({toprint})\n"
+
+            elif self.args[0].split(" ")[0] in funcnames:
                 pycode.pycode += ind + f"print({self.basmcalltopy(self.args[0])})\n"
 
             else:
@@ -78,6 +91,11 @@ class Compiler:
                 end = self.args[2].split("to")[1].strip()
                 pycode.pycode += ind + f"for {varname} in range({start}, {end}):\n"
 
+            elif keyword == "foreach":
+                varname = self.args[1]
+                iterablename = self.args[2]
+                pycode.pycode += ind + f"for {varname} in {iterablename}:\n"
+
         elif self.cmd == "func":
             funcname = self.args[0]
             if self.arglen == 1:
@@ -103,6 +121,40 @@ class Compiler:
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"@jit()\n"
                 pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
+
+        elif self.cmd == "class":
+            classname = self.args[0]
+            if self.arglen == 1:
+                pycode.pycode += ind + f"class {classname}:\n"
+
+            else:
+                superclass = self.args[1]
+                pycode.pycode += ind + f"class {classname}({superclass}):\n"
+
+        elif self.cmd == "import":
+            importname = self.args[0]
+
+            try:
+                with open("builtins/" + importname, "r") as f:
+                    for line in f.readlines():
+                        if line[0] == '#' or line.isspace():
+                            continue
+
+                        line = line.rstrip()
+                        Compiler(line, self.filename).basm2py() if not line.isspace() and line != "\n" else None
+
+            except FileNotFoundError:
+                try:
+                    with open(importname, "r") as f:
+                        for line in f.readlines():
+                            if line[0] == '#' or line.isspace():
+                                continue
+
+                            line = line.rstrip()
+                            Compiler(line, self.filename).basm2py() if not line.isspace() and line != "\n" else None
+
+                except FileNotFoundError:
+                    print(red(f"basm: ImportError: Could not find module '{importname}'; not a builtin or a file"))
 
 
         elif self.cmd == "return":
