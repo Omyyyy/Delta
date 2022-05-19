@@ -1,3 +1,6 @@
 import std.bpl
+import math.bpl
 
-printf {std.Upper("it works!")} 
+var num = math.Factorial [5]
+
+printf {num}

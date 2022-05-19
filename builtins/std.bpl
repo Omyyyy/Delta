@@ -17,5 +17,15 @@ class std
     func toList, [expr]
         return list(expr)
 
-    func Length, [expr]
-        return len(str(expr))
+    fastfunc Length, [expr]
+        var total = 0
+        loop foreach, character, str(expr)
+            var total += 1
+
+        return total
+
+    func randomInt, [start end]
+        return rnd.randint(start, end)
+
+    func randomChar, []
+        return rnd.choice(list(pystr.printable))

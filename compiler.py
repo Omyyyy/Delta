@@ -38,10 +38,10 @@ class Compiler:
                     pycode.pycode += ind + f"print(f'{toprint}')\n"
 
             elif self.args[0].split(" ")[0] in funcnames:
-                pycode.pycode += ind + f"print({self.bplcalltopy(self.args[0])})\n"
+                pycode.pycode += ind + f"print(f'{self.bplcalltopy(self.args[0])}')\n"
 
             else:
-                pycode.pycode += ind + f"print({toprint})\n"
+                pycode.pycode += ind + f"print(f'{toprint}')\n"
 
         elif self.cmd == "input":
             prompt = self.args[0]
@@ -49,11 +49,19 @@ class Compiler:
             pycode.pycode += ind + f"{varname} = input({prompt})\n"
 
         elif self.cmd == "var":
-            varthing = self.args[0]
+            varthing = self.args[0].strip()
             varname = self.args[0].split("=", 1)[0].strip()
             vardefin = self.args[0].split("=", 1)[1].strip()
-            if vardefin.split(" ", 1)[0] in funcnames:
+            if "." in vardefin:
+                if vardefin.split(" ")[0].split(".")[1] in funcnames:
+                    pycode.pycode += ind + f"{varname} = {self.bplcalltopy(vardefin)}\n"
+
+                else:
+                    pycode.pycode += ind + f"{varname} = {vardefin}\n"
+
+            elif self.args[0].split(" ")[0] in funcnames:
                 pycode.pycode += ind + f"{varname} = {self.bplcalltopy(vardefin)}\n"
+
             else:
                 pycode.pycode += ind + f"{varthing}\n"
 
@@ -114,6 +122,7 @@ class Compiler:
             if self.arglen == 1:
                 pycode.pycode += ind + f"@jit()\n"
                 pycode.pycode += ind + f"def {funcname}():\n"
+                funcnames.append(funcname)
 
             else:
                 arglist = self.args[1].removeprefix("[").removesuffix("]").split(" ")
@@ -121,6 +130,7 @@ class Compiler:
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"@jit()\n"
                 pycode.pycode += ind + f"def {funcname}({pyarglist}):\n"
+                funcnames.append(funcname)
 
         elif self.cmd == "class":
             classname = self.args[0]
