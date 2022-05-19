@@ -1,2 +1,2 @@
-# BPL
+# DELTA
 Bad Programming Language

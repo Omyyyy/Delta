@@ -21,7 +21,7 @@ class Compiler:
         self.arglen = len(self.args)
         self.filename = filename
 
-    def bpl2py(self):
+    def delta2py(self):
         ind = " " * (len(self.line) - len(self.line.lstrip()))
 
         if self.cmd == "print":
@@ -32,13 +32,13 @@ class Compiler:
             toprint = self.args[0]
             if "." in toprint:
                 if self.args[0].split(" ")[0].split(".")[1] in funcnames:
-                    pycode.pycode += ind + f"print({self.bplcalltopy(self.args[0])})\n"
+                    pycode.pycode += ind + f"print({self.deltacalltopy(self.args[0])})\n"
 
                 else:
                     pycode.pycode += ind + f"print({toprint})\n"
 
             elif self.args[0].split(" ")[0] in funcnames:
-                pycode.pycode += ind + f"print({self.bplcalltopy(self.args[0])})\n"
+                pycode.pycode += ind + f"print({self.deltacalltopy(self.args[0])})\n"
 
             else:
                 pycode.pycode += ind + f"print({toprint})\n"
@@ -54,13 +54,13 @@ class Compiler:
             vardefin = self.args[0].split("=", 1)[1].strip()
             if "." in vardefin:
                 if vardefin.split(" ")[0].split(".")[1] in funcnames:
-                    pycode.pycode += ind + f"{varname} = {self.bplcalltopy(vardefin)}\n"
+                    pycode.pycode += ind + f"{varname} = {self.deltacalltopy(vardefin)}\n"
 
                 else:
                     pycode.pycode += ind + f"{varname} = {vardefin}\n"
 
             elif vardefin.split(" ")[0] in funcnames:
-                pycode.pycode += ind + f"{varname} = {self.bplcalltopy(vardefin)}\n"
+                pycode.pycode += ind + f"{varname} = {self.deltacalltopy(vardefin)}\n"
 
             else:
                 pycode.pycode += ind + f"{varthing}\n"
@@ -151,7 +151,7 @@ class Compiler:
                             continue
 
                         line = line.rstrip()
-                        Compiler(line, self.filename).bpl2py() if not line.isspace() and line != "\n" else None
+                        Compiler(line, self.filename).delta2py() if not line.isspace() and line != "\n" else None
 
             except FileNotFoundError:
                 try:
@@ -161,10 +161,10 @@ class Compiler:
                                 continue
 
                             line = line.rstrip()
-                            Compiler(line, self.filename).bpl2py() if not line.isspace() and line != "\n" else None
+                            Compiler(line, self.filename).delta2py() if not line.isspace() and line != "\n" else None
 
                 except FileNotFoundError:
-                    print(red(f"bpl: ImportError: Could not find module '{importname}'; not a builtin or a file"))
+                    print(red(f"delta: ImportError: Could not find module '{importname}'; not a builtin or a file"))
 
 
         elif self.cmd == "return":
@@ -187,7 +187,7 @@ class Compiler:
                 pyarglist = ", ".join(arglist)
                 pycode.pycode += ind + f"{funcname}({pyarglist})\n"
 
-    def bplcalltopy(self, call: str):
+    def deltacalltopy(self, call: str):
         funcname = call.split(" ", 1)[0].strip()
         try:
             arglist = call.split(" ", 1)[1].strip().removeprefix("[").removesuffix("]").split(" ")

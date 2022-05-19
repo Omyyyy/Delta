@@ -6,7 +6,7 @@
         {
             "label": "Compile and Run BPL",
             "type": "shell",
-            "command": "python3 bpl.py -i '${file}'",
+            "command": "python3 delta.py -i '${file}'",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

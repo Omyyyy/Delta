@@ -1,5 +1,5 @@
-import std.bpl
-import math.bpl
+import std.delta
+import math.delta
 
 var num = math.Factorial [5]
 
