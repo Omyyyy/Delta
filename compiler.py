@@ -32,16 +32,16 @@ class Compiler:
             toprint = self.args[0]
             if "." in toprint:
                 if self.args[0].split(" ")[0].split(".")[1] in funcnames:
-                    pycode.pycode += ind + f"print(f'{self.bplcalltopy(self.args[0])}')\n"
+                    pycode.pycode += ind + f"print({self.bplcalltopy(self.args[0])})\n"
 
                 else:
-                    pycode.pycode += ind + f"print(f'{toprint}')\n"
+                    pycode.pycode += ind + f"print({toprint})\n"
 
             elif self.args[0].split(" ")[0] in funcnames:
-                pycode.pycode += ind + f"print(f'{self.bplcalltopy(self.args[0])}')\n"
+                pycode.pycode += ind + f"print({self.bplcalltopy(self.args[0])})\n"
 
             else:
-                pycode.pycode += ind + f"print(f'{toprint}')\n"
+                pycode.pycode += ind + f"print({toprint})\n"
 
         elif self.cmd == "input":
             prompt = self.args[0]
@@ -59,7 +59,7 @@ class Compiler:
                 else:
                     pycode.pycode += ind + f"{varname} = {vardefin}\n"
 
-            elif self.args[0].split(" ")[0] in funcnames:
+            elif vardefin.split(" ")[0] in funcnames:
                 pycode.pycode += ind + f"{varname} = {self.bplcalltopy(vardefin)}\n"
 
             else:
